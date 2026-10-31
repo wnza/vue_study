@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f6f7fb">
+  <meta name="referrer" content="no-referrer">
   <meta name="description" content="抖音视频、图集无水印提取。粘贴分享链接，一键提取并保存原画质视频或原图。">
   <title>憨憨去水印 · 抖音无水印提取</title>
   <style>
@@ -1352,7 +1353,7 @@
         <div class="media-col">
           <div class="video-stage" id="videoStage">
             <span class="preview-label">PREVIEW</span>
-            <video id="videoPlayer" controls playsinline preload="metadata"></video>
+            <video id="videoPlayer" controls playsinline preload="metadata" referrerpolicy="no-referrer"></video>
             <div class="video-fallback" id="videoFallback" hidden>
               <svg class="icon" aria-hidden="true"><use href="#i-video"/></svg>
               <span>预览加载失败<br>仍可直接保存视频文件</span>
@@ -1503,7 +1504,7 @@
     <button class="lightbox-nav prev" id="lightboxPrev" type="button" aria-label="上一张">
       <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg>
     </button>
-    <img id="lightboxImg" alt="">
+    <img id="lightboxImg" alt="" referrerpolicy="no-referrer">
     <button class="lightbox-nav next" id="lightboxNext" type="button" aria-label="下一张">
       <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
     </button>
@@ -1815,6 +1816,7 @@
           headers: { 'Accept': 'application/json' },
           signal: controller.signal,
           credentials: 'omit',
+          referrerPolicy: 'no-referrer',
           cache: 'no-store'
         });
         if (!response.ok) throw new Error(`解析服务暂时不可用（HTTP ${response.status}）`);
@@ -2057,7 +2059,7 @@
         }
       }
 
-      const response = await fetch(url, { credentials: 'omit', mode: 'cors' });
+      const response = await fetch(url, { credentials: 'omit', mode: 'cors', referrerPolicy: 'no-referrer' });
       if (!response.ok) {
         if (writable) {
           try { await writable.abort(); } catch { /* ignore */ }
@@ -2164,7 +2166,7 @@
       button.classList.add('is-loading');
       button.disabled = true;
       try {
-        const response = await fetch(image.url, { credentials: 'omit', mode: 'cors' });
+        const response = await fetch(image.url, { credentials: 'omit', mode: 'cors', referrerPolicy: 'no-referrer' });
         if (!response.ok) throw new Error('下载失败');
         const blob = await response.blob();
         downloadBlob(blob, `${baseFilename(current)}_${pad2(index + 1)}.${imageExtension(image.url, index)}`);
@@ -2227,7 +2229,7 @@
       try {
         await mapLimit(current.images, 4, async (image, index) => {
           try {
-            const response = await fetch(image.url, { credentials: 'omit', mode: 'cors' });
+            const response = await fetch(image.url, { credentials: 'omit', mode: 'cors', referrerPolicy: 'no-referrer' });
             if (!response.ok) throw new Error('HTTP ' + response.status);
             const buffer = new Uint8Array(await response.arrayBuffer());
             files[index] = {
